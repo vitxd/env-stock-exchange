@@ -5,6 +5,8 @@ RUN corepack enable
 COPY . /app
 WORKDIR /app
 
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm add -g knex
+
 FROM base AS dev
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm i
 

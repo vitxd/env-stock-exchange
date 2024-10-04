@@ -1,17 +1,7 @@
-import knex from 'knex';
-import bookshelf from 'bookshelf';
+import knex from 'Knex';
 
-const iKnex = knex({
-    client: 'mysql',
-    connection: {
-      host     : '127.0.0.1',
-      user     : 'your_database_user',
-      password : 'your_database_password',
-      database : 'myapp_test',
-      charset  : 'utf8'
-    }
-  })
+import knexConfig from '../../knexfile';
 
-const orm = bookshelf(iKnex as any)
-  
-export default orm;
+const iKnex = knex(knexConfig)
+
+export default iKnex;
