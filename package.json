@@ -12,7 +12,9 @@
     "prettier": "prettier src/ tests/ config/ --check",
     "type-check": "tsc --noEmit",
     "migrate": "knex migrate:latest",
-    "migrate:make": "knex migrate:make -x ts "
+    "migrate:make": "knex migrate:make -x ts ",
+    "seed:make": "knex seed:make -x ts ",
+    "seed": "knex seed:run"
   },
   "keywords": [],
   "author": "",
