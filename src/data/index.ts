@@ -1,18 +1,39 @@
-import { Environment, type Environment as EnvironmentType } from "../constants";
+import conn from './connection';
 
-export { default as ORM } from './orm';
+export interface Environment {
+    id: number
+    name: string
+};
 
-// const data: {[key: keyof EnvironmentType]: object} = Object.keys(Environment).reduce((res, el: string) => {
-//     res[el] = {};
+export interface Service {
+    id: number
+    name: string
+};
 
-//     return res;
-// });
+export interface Deployment {
+    environment_id: number
+    service_id: number
+    deployer: string
+    version: string
+    created_at: Date | null
+    updated_at: Date | null
+}
 
-const getEnvironment = (envName: keyof Environment): null|string => {
-    return 'something';
+const getEnvironments = () => {
+    return conn<Environment>('environments');
+};
+
+const getServices = () => {
+    return conn<Service>('services');
+}
+
+const getDeployments = () => {
+    return conn<Deployment>('deployments');
 }
 
 
 export {
-    getEnvironment
+    getEnvironments,
+    getServices,
+    getDeployments,
 }

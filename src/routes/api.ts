@@ -1,42 +1,64 @@
 import express, {type Request, Response} from 'express';
-import { EnvironmentValidator } from './validators/enum';
-import { Environment } from '../constants';
+import { getDeployments, getEnvironments, getServices, type Deployment } from '../data'
 
 const router = express.Router();
 
-router.get('/all', (req: Request, res: Response) => {
-    const data = Object.keys(Environment).reduce((data: {[key: string]: {[key: string]: string}}, envName) => {
-        data[envName] = {
-            buildingSafetyCase: '',
-            action: '',
-            documentVault: '',
-            documentGenerator: '',
-            riskhub: '',
-            admin: '',
-            surveyor: '',
-            client: '',
-        }
+router.get('/services', async (req: Request, res: Response) => {
+    const data = await getServices();
 
-        return data;
-    }, {})
+    res.json({data: data.map(({name}) => name)})
+});
+
+router.get('/environments', async (req: Request, res: Response) => {
+    const data = await getEnvironments();
+
+    res.json({data: data.map(({name})=> name)});
+});
+
+router.get('/all', async (req: Request, res: Response) => {
+    const envs = await getEnvironments();
+    const services = await getServices();
+    const deployments = await getDeployments();
     
+    type DeploymentData = Pick<Deployment, "version" | "deployer" | "created_at">
+
+    const findDeploymentFor = (envId: number, serviceId: number) => {
+        return deployments.find((el) => el.environment_id === envId && el.service_id === serviceId) || null;
+    }
+
+    const data = envs.reduce((envData: {[key: string]: {[key: string]: DeploymentData}}, env) => {
+        
+        envData[env.name] = services.reduce((serviceData: {[key: string]: DeploymentData}, service) => {
+            const dep = findDeploymentFor(env.id, service.id);
+
+            serviceData[service.name] = {
+                version: dep?.version || '',
+                deployer: dep?.deployer || '',
+                created_at: dep?.updated_at || null,
+            };
+
+            return serviceData;
+        }, {});
+
+        return envData;
+    }, {});
+
+
     res.json({data});
 });
 
-const envs = Object.keys(Environment);
+// router.post(`:envName/:service`, (req: Request, res: Response) => {
+//     const envName = req.params.envName;
+//     const service = req.params.service;
 
-router.post(`:envName(${envs.join('|')})/:service`, (req: Request, res: Response) => {
-    const envName = req.params.envName;
-    const service = req.params.service;
+//     res.json({data: true, envName, service});
+// });
 
-    res.json({data: true, envName, service});
-});
+// router.get(`/:envName(${envs.join('|')})/:service`, (req: Request, res: Response) => {
+//     const envName = req.params.envName;
+//     const service = req.params.service;
 
-router.get(`/:envName(${envs.join('|')})/:service`, (req: Request, res: Response) => {
-    const envName = req.params.envName;
-    const service = req.params.service;
-
-    res.json({data: true, envName, service});
-});
+//     res.json({data: true, envName, service});
+// });
 
 export default router;

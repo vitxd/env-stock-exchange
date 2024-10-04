@@ -8,7 +8,9 @@ WORKDIR /app
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm add -g knex
 
 FROM base AS dev
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm i
+RUN pnpm i
+RUN cat src/main.ts
+CMD [ "pnpm", "dev" ]
 
 FROM base AS prod-deps
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile

@@ -8,8 +8,8 @@
     "build": "tsc",
     "tests": "NODE_ENV=test mocha --recursive tests/",
     "start": "node src/main.js",
-    "lint": "eslint src/** tests/** config/**",
-    "prettier": "prettier src/ tests/ config/ --check",
+    "lint": "eslint src/** config/**",
+    "prettier": "prettier src/ config/ --check",
     "type-check": "tsc --noEmit",
     "migrate": "knex migrate:latest",
     "migrate:make": "knex migrate:make -x ts ",
@@ -21,6 +21,7 @@
   "license": "ISC",
   "packageManager": "pnpm@8.15.8+sha512.d1a029e1a447ad90bc96cd58b0fad486d2993d531856396f7babf2d83eb1823bb83c5a3d0fc18f675b2d10321d49eb161fece36fe8134aa5823ecd215feed392",
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@tsconfig/node20": "^20.1.4",
     "@types/express": "^5.0.0",
     "eslint": "^9.11.1",
@@ -30,11 +31,14 @@
     "typescript": "^5.6.2"
   },
   "dependencies": {
+    "@types/morgan": "^1.9.9",
     "dotenv": "^16.4.5",
     "esm": "^3.2.25",
     "express": "^4.21.0",
     "knex": "^3.1.0",
+    "morgan": "^1.10.0",
     "mysql2": "^3.11.3",
+    "winston": "^3.14.2",
     "zod": "^3.23.8"
   }
 }

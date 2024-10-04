@@ -6,7 +6,16 @@ services:
       target: dev
     volumes:
       - ./:/app
-    command: 'pnpm run dev'
+    command: 'bash -c "echo `pwd` && pnpm run dev"'
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
     ports:
       - 3000:3000
   db:

@@ -3,7 +3,7 @@
   "include": ["src/**/*", "config"],
   "exclude": ["node_modules"],
   "compilerOptions": {
-    "allowJs": true,
+    "allowJs": false,
     "outDir": "dist",
   }
 }
