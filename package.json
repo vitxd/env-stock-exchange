@@ -1,0 +1,38 @@
+{
+  "name": "env-stock-exchange",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon",
+    "build": "tsc",
+    "tests": "NODE_ENV=test mocha --recursive tests/",
+    "start": "node src/main.js",
+    "lint": "eslint src/** tests/** config/**",
+    "prettier": "prettier src/ tests/ config/ --check",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@8.15.8+sha512.d1a029e1a447ad90bc96cd58b0fad486d2993d531856396f7babf2d83eb1823bb83c5a3d0fc18f675b2d10321d49eb161fece36fe8134aa5823ecd215feed392",
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.4",
+    "@types/bookshelf": "^1.2.9",
+    "@types/express": "^5.0.0",
+    "eslint": "^9.11.1",
+    "nodemon": "^3.1.7",
+    "prettier": "^3.3.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2"
+  },
+  "dependencies": {
+    "bookshelf": "^1.2.0",
+    "dotenv": "^16.4.5",
+    "esm": "^3.2.25",
+    "express": "^4.21.0",
+    "knex": "^3.1.0",
+    "mysql": "^2.18.1",
+    "zod": "^3.23.8"
+  }
+}
