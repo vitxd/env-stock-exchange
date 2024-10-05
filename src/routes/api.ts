@@ -1,5 +1,5 @@
 import express, {type Request, Response} from 'express';
-import { findEnvByName, findServiceByName, getDeployments, getEnvironments, getServices, storeDeployment, type Deployment } from '../data'
+import { findEnvByName, findServiceByName, getDeployments, getEnvironments, getServices, storeDeployment, findDeploymentFor, type Deployment } from '../data'
 import { DeploymentValidator } from './validators';
 import { ZodError } from 'zod';
 
@@ -76,14 +76,15 @@ router.post(`/:envName/:service`, async (req: Request, res: Response) => {
             res.status(500).json({})
         }
     }
-
 });
 
-// router.get(`/:envName(${envs.join('|')})/:service`, (req: Request, res: Response) => {
-//     const envName = req.params.envName;
-//     const service = req.params.service;
+router.get(`/:envName/:service`, async (req: Request, res: Response) => {
+    const envName = req.params.envName;
+    const service = req.params.service;
 
-//     res.json({data: true, envName, service});
-// });
+    const deployment = await findDeploymentFor(envName, service);
+
+    res.json({data: deployment});
+});
 
 export default router;
