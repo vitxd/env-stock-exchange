@@ -1,8 +1,9 @@
-import express from 'express';
+import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
+import express from 'express';
+
 import morganMiddleware from './middlewares/morgan.middleware';
 import { Api, Web } from './routes';
-import bodyParser from 'body-parser';
 
 dotenv.config();
 

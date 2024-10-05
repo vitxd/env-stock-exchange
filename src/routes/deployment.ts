@@ -1,77 +1,99 @@
-import express, {type Request, Response} from 'express';
-import { findEnvByName, findServiceByName, getDeployments, getEnvironments, getServices, storeDeployment, findDeployment, type Deployment } from '../data'
-import { DeploymentValidator } from './validators';
+import express, { type Request, Response } from 'express';
 import { ZodError } from 'zod';
+
+import {
+  type Deployment,
+  findDeployment,
+  findEnvByName,
+  findServiceByName,
+  getDeployments,
+  getEnvironments,
+  getServices,
+  storeDeployment,
+} from '../data';
+import { DeploymentValidator } from './validators';
 
 const router = express.Router();
 
 router.get('/', async (req: Request, res: Response) => {
-    const envs = await getEnvironments();
-    const services = await getServices();
-    const deployments = await getDeployments();
-    
-    type DeploymentData = Pick<Deployment, "version" | "deployer" | "created_at">
+  const envs = await getEnvironments();
+  const services = await getServices();
+  const deployments = await getDeployments();
 
-    const findDeploymentFor = (envId: number, serviceId: number) => {
-        return deployments.find((el) => el.environment_id === envId && el.service_id === serviceId) || null;
-    }
+  type DeploymentData = Pick<Deployment, 'version' | 'deployer' | 'created_at'>;
 
-    const data = envs.reduce((envData: {[key: string]: {[key: string]: DeploymentData}}, env) => {
-        envData[env.name] = services.reduce((serviceData: {[key: string]: DeploymentData}, service) => {
-            const dep = findDeploymentFor(env.id, service.id);
+  const findDeploymentFor = (envId: number, serviceId: number) => {
+    return (
+      deployments.find(
+        (el) => el.environment_id === envId && el.service_id === serviceId,
+      ) || null
+    );
+  };
 
-            serviceData[service.name] = {
-                version: dep?.version || '',
-                deployer: dep?.deployer || '',
-                created_at: dep?.updated_at || null,
-            };
+  const data = envs.reduce(
+    (envData: { [key: string]: { [key: string]: DeploymentData } }, env) => {
+      envData[env.name] = services.reduce(
+        (serviceData: { [key: string]: DeploymentData }, service) => {
+          const dep = findDeploymentFor(env.id, service.id);
 
-            return serviceData;
-        }, {});
+          serviceData[service.name] = {
+            version: dep?.version || '',
+            deployer: dep?.deployer || '',
+            created_at: dep?.updated_at || null,
+          };
 
-        return envData;
-    }, {});
+          return serviceData;
+        },
+        {},
+      );
 
+      return envData;
+    },
+    {},
+  );
 
-    res.json({data});
+  res.json({ data });
 });
 
 router.post(`/:envName/:service`, async (req: Request, res: Response) => {
-    const env = await findEnvByName(req.params.envName);
-    const service = await findServiceByName(req.params.service);
+  const env = await findEnvByName(req.params.envName);
+  const service = await findServiceByName(req.params.service);
 
-    if (env === undefined || service === undefined) {
-        res.status(404).json();
-        return;
+  if (env === undefined || service === undefined) {
+    res.status(404).json();
+    return;
+  }
+
+  const data = req.body;
+  console.log(data);
+
+  try {
+    DeploymentValidator.parse(data);
+
+    storeDeployment(env.id, service.id, data);
+
+    res.status(201).json();
+  } catch (e) {
+    if (e instanceof ZodError) {
+      res.status(422).json({
+        error: e.errors.map((el) => ({
+          field: el.path[0],
+          message: el.message,
+        })),
+      });
+    } else {
+      res.status(500).json({});
     }
-
-    const data = req.body;
-    console.log(data);
-
-    try {
-        DeploymentValidator.parse(data);
-
-        storeDeployment(env.id, service.id, data);
-    
-        res.status(201).json();
-    } catch (e) {
-        if (e instanceof ZodError) {
-            res.status(422).json({
-                error: e.errors.map(el => ({field: el.path[0], message: el.message})),
-            });
-        } else {
-            res.status(500).json({})
-        }
-    }
+  }
 });
 
 router.get(`/:envName/:service`, async (req: Request, res: Response) => {
-    const envName = req.params.envName;
-    const service = req.params.service;
+  const envName = req.params.envName;
+  const service = req.params.service;
 
-    const deployment = await findDeployment(envName, service);
+  const deployment = await findDeployment(envName, service);
 
-    res.json({data: deployment});
+  res.json({ data: deployment });
 });
 
 export default router;

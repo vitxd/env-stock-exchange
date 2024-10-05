@@ -9,12 +9,12 @@ servers:
   - url: 'http://localhost:3000'
     description: Development server
 tags:
-    - name: Deployment
-      description: Deployment
-    - name: Environment
-      description: Environment
-    - name: Service
-      description: Service
+  - name: Deployment
+    description: Deployment
+  - name: Environment
+    description: Environment
+  - name: Service
+    description: Service
 paths:
   '/api/deployment':
     get:
@@ -113,7 +113,7 @@ paths:
                   type: string
                   description: Name of the deployer
                   example: 'John Doe'
-      responses:                    
+      responses:
         '201':
           description: Deployment stored
 
@@ -167,7 +167,17 @@ paths:
                     - riskhub_api
                     - document_vault
 
-  ''
+  '/api/environment/reserve/{environment}':
+    post:
+      tags:
+        - Environment
+      parameters:
+        - $ref: '#/components/parameters/Environment'
+      responses:
+        '201':
+          description: Environment reserved
+        '409':
+          description: Environment already reserved
 
 components:
   parameters:

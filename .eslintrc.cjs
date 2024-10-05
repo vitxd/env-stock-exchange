@@ -11,20 +11,14 @@ module.exports = {
 
   // extends
 
-  extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-  ],
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
 
   // vue and typescript parsers
 
-  plugins: [
-    '@typescript-eslint',
-    'prettier'
-  ],
-  parser: "@typescript-eslint/parser",
+  plugins: ['@typescript-eslint', 'prettier'],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: "latest",
+    ecmaVersion: 'latest',
     sourceType: 'module',
   },
 
@@ -38,24 +32,10 @@ module.exports = {
     '.*rc.*',
   ],
   rules: {
-    'indent': [
-      'error',
-      2
-    ],
-    'linebreak-style': [
-        'error',
-        'unix'
-    ],
-    quotes: [
-        'error',
-        'single',
-        { avoidEscape: true }
-    ],
-    semi: [
-        'error',
-        'always'
-    ],
-    'prettier/prettier': 'error'
-  }
+    indent: ['error', 2],
+    'linebreak-style': ['error', 'unix'],
+    quotes: ['error', 'single', { avoidEscape: true }],
+    semi: ['error', 'always'],
+    'prettier/prettier': 'error',
+  },
 };
-

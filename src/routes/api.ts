@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import environment from './environment';
+
 import deployment from './deployment';
+import environment from './environment';
 import service from './service';
 
 const router = Router();
