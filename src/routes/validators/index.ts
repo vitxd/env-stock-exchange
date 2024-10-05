@@ -6,3 +6,7 @@ export const DeploymentValidator = z.object({
 });
 
 export type DeploymentPayload = z.infer<typeof DeploymentValidator>;
+
+export const ReserveValidator = z.object({
+    name: z.string(),
+});

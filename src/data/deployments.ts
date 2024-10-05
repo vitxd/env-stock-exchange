@@ -26,7 +26,7 @@ const getDeployments = () => {
     return conn<Deployment>('deployments');
 }
 
-const findDeploymentFor = async (envName: string, serviceName: string): Promise<null | Deployment> => {
+const findDeployment = async (envName: string, serviceName: string): Promise<null | Deployment> => {
     return conn<Deployment>('deployments')
         .join('services', 'deployments.service_id', '=', 'services.id')
         .join('environments', 'deployments.environment_id', '=', 'environments.id')
@@ -39,5 +39,5 @@ export {
     type Deployment,
     storeDeployment,
     getDeployments,
-    findDeploymentFor,
+    findDeployment,
 }

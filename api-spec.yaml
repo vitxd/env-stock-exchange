@@ -1,0 +1,189 @@
+openapi: 3.0.3
+info:
+  title: Riskhub Environment Stock Exchange API
+  description: |-
+    API Endpoints for the Riskhub Stock Exchange API
+    https://github.com/riskhubdev/env-stock-exchange
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:3000'
+    description: Development server
+tags:
+    - name: Deployment
+      description: Deployment
+    - name: Environment
+      description: Environment
+    - name: Service
+      description: Service
+paths:
+  '/api/deployment':
+    get:
+      tags:
+        - Deployment
+      responses:
+        '200':
+          description: List of deployments
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    additionalProperties:
+                      type: object
+                      description: Keys will be the environment
+                      additionalProperties:
+                        type: object
+                        description: Key will be the service
+                        properties:
+                          version:
+                            type: string
+                            nullable: true
+                          deployer:
+                            type: string
+                            nullable: true
+                          created_at:
+                            type: string
+                            format: date-time
+                            nullable: true
+                example:
+                  data:
+                    dev01:
+                      building_safety_case:
+                        version: 1.0.0
+                        deployer: 'John Doe'
+                        created_at: '2021-01-01T00:00:00Z'
+
+  '/api/deployment/{environment}/{service}':
+    get:
+      tags:
+        - Deployment
+      parameters:
+        - $ref: '#/components/parameters/Environment'
+        - $ref: '#/components/parameters/Service'
+      responses:
+        '200':
+          description: Deployment details
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - version
+                  - deployer
+                  - created_at
+                properties:
+                  version:
+                    type: string
+                    description: Version deployed
+                    example: 1.0.0
+                  deployer:
+                    type: string
+                    description: Name of the deployer
+                    example: 'John Doe'
+                  created_at:
+                    type: string
+                    format: date-time
+                    description: Date and time of deployment
+                    example: '2021-01-01T00:00:00Z'
+    post:
+      tags:
+        - Deployment
+      parameters:
+        - $ref: '#/components/parameters/Environment'
+        - $ref: '#/components/parameters/Service'
+      requestBody:
+        description: Deployment request
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - version
+              properties:
+                version:
+                  type: string
+                  description: Version deployed
+                  example: 1.0.0
+                deployer:
+                  type: string
+                  description: Name of the deployer
+                  example: 'John Doe'
+      responses:                    
+        '201':
+          description: Deployment stored
+
+  '/api/environment':
+    get:
+      tags:
+        - Environment
+      responses:
+        '200':
+          description: List of environments
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: string
+                example:
+                  data:
+                    - dev01
+                    - dev02
+                    - prod01
+
+  '/api/service':
+    get:
+      tags:
+        - Service
+      responses:
+        '200':
+          description: List of services
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: string
+                example:
+                  data:
+                    - building_safety_case
+                    - riskhub_api
+                    - document_vault
+
+  ''
+
+components:
+  parameters:
+    Environment:
+      in: path
+      name: environment
+      required: true
+      schema:
+        type: string
+      description: Environment
+      example: dev01
+    Service:
+      in: path
+      name: service
+      required: true
+      schema:
+        type: string
+      description: Service
+      example: building_safety_case
