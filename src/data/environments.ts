@@ -17,8 +17,11 @@ const findEnvByName = (name: string) => {
 };
 
 const reserve = async (envId: number, name: string) => {
-  console.log(name);
   await conn('environments').where('id', envId).update({ owner: name });
 };
 
-export { type Environment, getEnvironments, findEnvByName, reserve };
+const release = async (envId: number) => {
+  await conn('environments').where('id', envId).update({ owner: null });
+};
+
+export { type Environment, getEnvironments, findEnvByName, reserve, release };

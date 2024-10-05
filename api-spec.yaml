@@ -174,10 +174,33 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Environment'
       responses:
-        '201':
+        '204':
           description: Environment reserved
         '409':
           description: Environment already reserved
+          schema:
+            type: object
+            required:
+              - message
+            properties:
+              owner:
+                type: string
+                description: Owner of the environment
+                example: 'Vittorio'
+        '404':
+          description: Environment does not exist
+
+  '/api/environment/release/{environment}':
+    post:
+      tags:
+        - Environment
+      parameters:
+        - $ref: '#/components/parameters/Environment'
+      responses:
+        '204':
+          description: Environment reserved
+        '404':
+          description: Environment does not exist
 
 components:
   parameters:
