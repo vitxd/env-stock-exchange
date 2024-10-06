@@ -8,7 +8,7 @@ interface Environment {
   created_at: Date;
 }
 
-const getEnvironments = () => {
+const fetchEnvironments = () => {
   return conn<Environment>('environments');
 };
 
@@ -24,4 +24,4 @@ const release = async (envId: number) => {
   await conn('environments').where('id', envId).update({ owner: null });
 };
 
-export { type Environment, getEnvironments, findEnvByName, reserve, release };
+export { type Environment, fetchEnvironments, findEnvByName, reserve, release };

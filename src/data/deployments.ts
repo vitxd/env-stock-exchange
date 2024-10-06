@@ -1,4 +1,4 @@
-import type { DeploymentPayload } from '../routes/validators';
+import type { DeploymentPayload } from '../validators';
 import conn from './connection';
 
 interface Deployment {

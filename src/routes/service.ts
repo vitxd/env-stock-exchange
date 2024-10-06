@@ -1,13 +1,11 @@
 import express, { type Request, Response } from 'express';
 
-import { getServices } from '../data';
+import { listServices } from '../service/services';
 
 const router = express.Router();
 
 router.get('/', async (req: Request, res: Response) => {
-  const data = await getServices();
-
-  res.json({ data: data.map(({ name }) => name) });
+  res.json({ data: listServices() });
 });
 
 export default router;

@@ -10,3 +10,5 @@ export type DeploymentPayload = z.infer<typeof DeploymentValidator>;
 export const ReserveValidator = z.object({
   name: z.string(),
 });
+
+export const ReserveSlackValidator = z.object({});

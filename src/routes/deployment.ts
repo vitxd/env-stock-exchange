@@ -3,20 +3,21 @@ import { ZodError } from 'zod';
 
 import {
   type Deployment,
+  fetchEnvironments,
   findDeployment,
   findEnvByName,
   findServiceByName,
   getDeployments,
-  getEnvironments,
   getServices,
   storeDeployment,
 } from '../data';
-import { DeploymentValidator } from './validators';
+import ResourceNotFoundError from '../exceptions/ResourceNotFoundError';
+import { DeploymentValidator } from '../validators';
 
 const router = express.Router();
 
 router.get('/', async (req: Request, res: Response) => {
-  const envs = await getEnvironments();
+  const envs = await fetchEnvironments();
   const services = await getServices();
   const deployments = await getDeployments();
 
@@ -60,31 +61,16 @@ router.post(`/:envName/:service`, async (req: Request, res: Response) => {
   const service = await findServiceByName(req.params.service);
 
   if (env === undefined || service === undefined) {
-    res.status(404).json();
-    return;
+    throw new ResourceNotFoundError();
   }
 
   const data = req.body;
-  console.log(data);
 
-  try {
-    DeploymentValidator.parse(data);
+  DeploymentValidator.parse(data);
 
-    storeDeployment(env.id, service.id, data);
+  storeDeployment(env.id, service.id, data);
 
-    res.status(201).json();
-  } catch (e) {
-    if (e instanceof ZodError) {
-      res.status(422).json({
-        error: e.errors.map((el) => ({
-          field: el.path[0],
-          message: el.message,
-        })),
-      });
-    } else {
-      res.status(500).json({});
-    }
-  }
+  res.status(201).json();
 });
 
 router.get(`/:envName/:service`, async (req: Request, res: Response) => {
