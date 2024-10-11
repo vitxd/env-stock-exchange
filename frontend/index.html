@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>env-stock-exchange</title>
+  <link rel="stylesheet" href="/main.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="p-8">
+  <div class="flex flex-col">
+    <div class="-m-1.5 overflow-x-auto">
+      <div class="p-1.5 min-w-full inline-block align-middle">
+        <div class="overflow-hidden">
+          <table class="min-w-full divide-y divide-gray-200" x-data="application.deploymentTable()">
+            <thead>
+              <tr>
+                <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500"></th>
+                <template x-for="col, i in def.cols" :key="col">
+                  <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500" x-text="col"></th>
+                </template>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <template x-for="row in def.rows" :key="row">
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <span class="bg-blue-500 text-white px-2.5 py-1.5 rounded-sm" x-text="row"></span>
+                  </td>
+                  
+                  <template x-for="col in def.cols" :key="col">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" x-html="JSON.stringify(def.map[makeKey(col,row)])"></td>
+                  </template>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+  <script type="module" src="/main.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 {
-  "watch": ["src"],
-  "ext": ".ts",
+  "watch": ["config", "src", "frontend"],
+  "ext": ".ts,.js,.html,.css",
   "ignore": [],
-  "exec": "tsc && node dist/src/main.js"
+  "exec": "pnpm run build && node dist/src/main.js"
 }

@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",
-    "build": "tsc",
+    "build": "pnpm run build:backend && pnpm run build:frontend",
+    "build:backend": "tsc",
+    "build:frontend": "mkdir -p dist/frontend && cp frontend/*.{html,css,js} dist/frontend",
     "tests": "NODE_ENV=test mocha --recursive tests/",
     "start": "node src/main.js",
     "lint": "eslint src/** config/**",
