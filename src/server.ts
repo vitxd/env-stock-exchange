@@ -4,7 +4,7 @@ import express from 'express';
 
 import errorHandler from './middlewares/errorHandler.middleware';
 import morganMiddleware from './middlewares/morgan.middleware';
-import { Api, Slack, Web } from './routes';
+import { Api, Slack } from './routes';
 
 dotenv.config();
 
@@ -16,7 +16,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(errorHandler);
 
-app.use('/', Web);
+app.use(express.static('public'))
+
 app.use('/api', Api);
 app.use('/slack', Slack);
 
