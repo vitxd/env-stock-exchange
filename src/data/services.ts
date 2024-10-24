@@ -13,4 +13,11 @@ const findServiceByName = (name: string) => {
   return conn<Service>('services').where('name', name).first();
 };
 
-export { type Service, getServices, findServiceByName };
+const storeImage = async (serviceId: number, imageName: string) => {
+  await conn('images').insert({
+    name: imageName,
+    service_id: serviceId,
+  });
+};
+
+export { type Service, getServices, findServiceByName, storeImage };

@@ -11,7 +11,7 @@
     "tests": "NODE_ENV=test mocha --recursive tests/",
     "start": "node src/main.js",
     "lint": "eslint src/** config/**",
-    "prettier": "prettier src/ config/ --check",
+    "prettier": "prettier src/ config/ db/ --check",
     "type-check": "tsc --noEmit",
     "migrate": "knex migrate:latest",
     "migrate:make": "knex migrate:make -x ts ",
