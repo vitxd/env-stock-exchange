@@ -16,9 +16,13 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(errorHandler);
 
-app.use(express.static('public'))
+app.use(express.static('public'));
 
 app.use('/api', Api);
 app.use('/slack', Slack);
+
+app.use((req, res, next) => {
+  res.status(404).json();
+});
 
 export default app;
