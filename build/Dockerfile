@@ -9,7 +9,6 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm add -g knex
 
 FROM base AS dev
 RUN pnpm i
-RUN cat src/main.ts
 CMD [ "pnpm", "dev" ]
 
 FROM base AS prod-deps

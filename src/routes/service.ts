@@ -12,7 +12,13 @@ router.post('/:serviceName/image', async (req: Request, res: Response) => {
   const { image } = req.body;
   const { serviceName } = req.params;
 
-  await createImage(serviceName, image);
+  try {
+    await createImage(serviceName, image);
+  } catch (e) {
+    res.status(404).json();
+
+    return;
+  }
 
   res.status(201).json();
 });
