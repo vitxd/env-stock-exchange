@@ -1,20 +1,22 @@
 import { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 
-import ResourceNotFoundError from '../exceptions/ResourceNotFoundError';
+import { HttpException } from '../exceptions';
 
 function errorHandler(
-  err: unknown,
+  err: Error,
   req: Request,
   res: Response,
   next: NextFunction,
 ) {
+  console.log('Error handler');
+
   if (res.headersSent) {
     return next(err);
   }
 
-  if (err instanceof ResourceNotFoundError) {
-    res.status(404).json();
+  if (err instanceof HttpException) {
+    res.status(err.status).json();
 
     return;
   }

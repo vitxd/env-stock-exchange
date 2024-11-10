@@ -1,5 +1,6 @@
 import express, { type Request, Response } from 'express';
 
+import ResourceNotFoundError from '../exceptions/ResourceNotFoundError';
 import { createImage, listServices } from '../service/services';
 
 const router = express.Router();
@@ -15,9 +16,7 @@ router.post('/:serviceName/image', async (req: Request, res: Response) => {
   try {
     await createImage(serviceName, image);
   } catch (e) {
-    res.status(404).json();
-
-    return;
+    throw new ResourceNotFoundError();
   }
 
   res.status(201).json();

@@ -1,4 +1,5 @@
 import { findServiceByName, getServices, storeImage } from '../data';
+import ResourceNotFoundError from '../exceptions/ResourceNotFoundError';
 
 export const listServices = async () => {
   const data = await getServices();

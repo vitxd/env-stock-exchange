@@ -1,5 +1,7 @@
-export default class ResourceNotFoundError extends Error {
+import { HttpException } from '.';
+
+export default class ResourceNotFoundError extends HttpException {
   constructor() {
-    super();
+    super(404, '');
   }
 }

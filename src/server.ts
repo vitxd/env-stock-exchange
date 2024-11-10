@@ -14,10 +14,9 @@ app.use(morganMiddleware);
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(errorHandler);
-
 app.use(express.static('public'));
 
+app.use(errorHandler);
 app.use('/api', Api);
 app.use('/slack', Slack);
 
